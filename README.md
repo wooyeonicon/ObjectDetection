@@ -123,7 +123,7 @@ yolo系列的学习笔记
 
 9. **Yolov4**在**DIOU_Loss**的基础上采用**DIOU_nms**的方式，而**Yolov5**中仍然采用**加权nms**的方式。（可以进行修改：对于一些**遮挡重叠**的目标，确实会有一些**改进**。）
 
-Yolov7
+# Yolov7
 1. 当前目标检测主要的优化方向：更快更强的网络架构；更有效的特征集成方法；更准确的检测方法；更精确的损失函数；更有效的标签分配方法；更有效的训练方法。
 2. Input：整体复用yolov5的预处理方式和相关源码。（注意：官方使用的是640x640和1280x1280这样较大图片做训练和测试）
 3. backbone：主要使用ELAN（并没有使用论文中最复杂的E-ELAN结构）和MP结构。激活函数:silu
@@ -135,7 +135,7 @@ Yolov7
   3. MP结构（与backbone中的参数不同）
   4. 比较流行的重参数化结构Rep结构。
 
-SSD
+# SSD
 1. 主要思路是利用CNN提取特征后，均匀的在图片的不同位置进行密集抽样，抽样时可以采用不同尺度和长宽比，物体分类与预测框的回归同时进行，整个过程只需要一步，所以其优势是速度快。
 2. Single Shot MultiBox Detector,Single shot 说明SSD算法属于one-stage方法，MultiBox说明SSD算法基于多框预测。
 3. SSD采用的主干网络是VGG网络。
@@ -151,14 +151,14 @@ SSD
   3. SSD采用了不同尺度和长宽比的先验框（Prior boxes,Default boxes，在Faster R-CNN中叫做锚，Anchors）。Yolo算法缺点是难以检测小目标，而且定位不准。
   4. SSD将背景当做一个特殊的类别，如果检测目标共C个类别，SSD需要预测C+1个置信度，其中第一个置信度是不含目标或背景的评分。
 [图片]
-R-CNN
+# R-CNN
 1. 预训练模型：选择一个神经网络（AlexNet、VGG）
 2. 重新训练全连接层：使用需要检测的目标重新训练全连接层。
 3. 使用selective search提取region proposals
 4. 使用SVM实现分类:使用Feature Map训练SVM来对目标和背景进行分类。
 5. 边界框回归：训练将输出一些校正因子的线性回归分类器。
 6. 缺点：重复计算，每个region proposal，都需要经过一个AlexNet特征提取。selective search方法生成region proposal，对每一帧图像，需要花费2秒。三个模块（提取、分类、回归）是分别训练的，并在训练时，对于存储空间消耗较大。
-Fast R-CNN
+# Fast R-CNN
 1. 基于R-CNN与SPPNets进行改进。（SPPnets的创新点是只进行一次图像特征提取，而不是每个候选区域计算一次，根据算法，将候选区域特征映射到整张图片特征图中。）
 2. 流程：
   1. 使用selective search生成region proposal候选框。
@@ -169,7 +169,7 @@ Fast R-CNN
 3. 加入了Rol Pooling，采用一个神经网络对全图提取特征。
 4. 在网络中加入了多任务函数边框回归，实现了端到端的训练。
 5. 缺点：采用selective search提取region proposal。无法满足实时应用。利用了GPU,但是region proposal方法在CPU上实现。
-Faster R-CNN
+# Faster R-CNN
 1. 流程：
   1. 首先使用一组基本的卷积/激活/池化层提取图像的特征，用于后续的RPN层和全连接层。
   2. Region proposal network（RPN）。用于生成候选区域，该层通过softmax判断锚点（Anchors）属于前景还是背景，再使用bounding box regression（包围边框回归）获得精确的候选区域。
